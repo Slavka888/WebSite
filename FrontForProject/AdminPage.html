@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="fonts/font.css">
+    <link rel="icon" href="images/logo.png">
+    <title>Админ</title>
+</head>
+<body>
+<div class="user_wrapper">
+</div>
+<div class="content-container_user">
+    <header class="header_user">
+        <h1>Кабинет администратора</h1>
+    </header>
+    <main class="main_admin">
+        <section class = "task-section">
+            <textarea class="admin_textarea" placeholder="Введите задачу для сотрудника..." id="taskInput"></textarea>
+            <button class="admin_button" id="sendTaskButton">Отправить задачу</button>
+        </section>
+        <section class = "workers_section">
+            <select class="choose_worker" id="workerSelect">
+                <!-- Работники будут динамически добавляться сюда -->
+            </select>
+            <button class="admin_button delete_button" id="deleteWorkerButton">Удалить работника</button>
+        </section>
+    </main>
+</div>
+<script src="scripts/adminScript.js"></script>
+</body>
+</html>

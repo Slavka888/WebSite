@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="fonts/font.css">
+    <link rel="icon" href="images/logo.png">
+    <title>Работник</title>
+</head>
+<body>
+<div class="user_wrapper">
+</div>
+<div class="content-container_user">
+    <header class="header_user">
+        <h1>Кабинет рабочего</h1>
+    </header>
+    <main class="main_user">
+        <section class="worker_tasks">
+            <h2 class="worker_header_tasks">Ваши задачи:</h2>
+            <section class = "worker_tasks_block" id="tasksList">
+                <!-- Задачи будут динамически добавляться сюда -->
+            </section>
+            <button class="worker_tasks_button" id="finishTaskButton">Выполнено</button>
+        </section>
+    </main>
+</div>
+<script src="scripts/workerScript.js"></script>
+</body>
+</html>

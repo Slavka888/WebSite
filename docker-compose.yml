@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./FrontForProject
+      dockerfile: Dockerfile
+    ports:
+      - "63343:63343"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./ServerForProject/server
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    networks:
+      - app-network
+
+  database:
+    build:
+      context: ./ServerForProject/server
+      dockerfile: DockerfileDB
+    volumes:
+      - db-data:/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db-data:

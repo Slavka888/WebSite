@@ -1,0 +1,304 @@
+body, h1, h2, h3, h4, h5, h6, p {
+    margin: 0;
+    padding: 0;
+}
+
+
+html {
+    Font-family: Inter, sans-serif;
+}
+.header{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    border-bottom: white 1px solid;
+    border-radius: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+h1{
+    font-size: 2.3rem;
+}
+
+body{
+    display: flex;
+    height: 100vh;
+    background: linear-gradient(to bottom, #f6f6f6, #6c6c6c);
+    justify-content: center;
+}
+
+.wrapper{
+    background-image: url("../images/forstartpage.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    filter: opacity(0.8);
+    height: 100vh;
+    width: 70%;
+    box-shadow: 0px 0px 20px black;
+    z-index: -1;
+}
+
+.header_user{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.95);
+    border-bottom:black 1px solid;
+    border-radius: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+}
+
+.user_wrapper{
+    background-image: url("../images/forotherpages.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    filter: opacity(0.8);
+    height: 100%;
+    width: 100%;
+    box-shadow: 0px 0px 20px black;
+    z-index: -1;
+}
+
+.content-container{
+    width: 70%;
+    box-sizing: border-box;
+}
+
+.content-container_user{
+    width: 70%;
+    box-sizing: border-box;
+    border-left: black 3px solid;
+    border-right: black 3px solid;
+    background-color: rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 0px 20px black;
+}
+
+.main{
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+ }
+
+.main_admin{
+    display: flex;
+    justify-content: space-around;
+}
+
+.main_user{
+    display: flex;
+    justify-content: center;
+}
+
+.registration_h2{
+    padding-top: 2%;
+    margin-bottom: 5%;
+    font-size: 1.5rem;
+}
+
+.registration-form{
+    text-align: center;
+    margin-top: 20%;
+    color: black;
+    width: 60%;
+    text-transform: uppercase;
+    box-sizing: border-box;
+    border: 1px solid white;
+    border-radius: 20px;
+    background-color: rgba(191, 183, 183, 0.3);
+
+}
+ .form-group{
+     margin-bottom: 10px;
+     font-size: 1.2rem;
+ }
+
+label {
+    display: block;
+    margin-bottom: 1px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 50%;
+    padding: 1px 15px;
+    border: 2px solid #7c7c7c;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+
+.submit-btn {
+    width: 70%;
+    background: linear-gradient( #8686b5, #b19cb1);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+
+@media (max-height: 650px) {
+    .form-group{
+        margin-bottom: 10px;
+        font-size: 0.8rem;
+
+    }
+    .registration_h2{
+        margin-bottom: 30px;
+        font-size: 1.1rem;
+    }
+    h1{
+        font-size: 1.2rem;
+    }
+    .registration-form{
+        margin-top: 10%;
+        width: 50%;
+    }
+    .submit-btn {
+        width: 70%;
+        background: linear-gradient( #8686b5, #b19cb1);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        margin-top: 5%;
+        margin-bottom: 5%;
+    }
+}
+
+input{
+    background-color: rgba(255 255 255 / 0.5);
+}
+
+.admin_textarea {
+    border: 5px solid black;
+    border-radius: 2px;
+    resize: none;
+    background-color: transparent;
+    color: black;
+    font-size: 1rem;
+    height: 100%;
+}
+
+.task-section {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    height: 60vh;
+    gap: 10px;
+    box-sizing: border-box;
+}
+
+.admin_textarea:hover{
+    outline: white 1px solid;
+}
+
+.admin_textarea::placeholder {
+    color: rgba( 0 0 0 / 0.8);
+    font-size: 1.5rem;
+}
+
+.admin_button {
+    background-color: rgba(255 255 255 / 0.3);
+    margin: auto;
+    color: black;
+    font-size: 18px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.admin_button:hover {
+    cursor: pointer;
+    background-color: olivedrab;
+    transition: 2s;
+}
+
+.workers_section {
+    margin-top: 30px;
+    width: 40%;
+    height: 60vh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.choose_worker {
+    text-align: center;
+    height: 10vh;
+    border: 5px solid black;
+    border-radius: 2px;
+    font-size: 1rem;
+    background: transparent;
+}
+
+.admin_button.delete_button {
+    margin: 0  auto;
+}
+
+.admin_button.delete_button:hover {
+    background-color: #881b1b;
+    transition: 2s;
+}
+
+.choose_worker option {
+    padding: 8px;
+    background: transparent;
+}
+
+
+.worker_tasks {
+    margin-top: 30px;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.worker_tasks_block {
+    border: 5px solid black;
+    height: 60vh;
+    overflow-y: auto;
+    word-wrap: break-word;
+    text-align: center;
+    font-size: 1.5rem;
+    padding-top: 5px;
+}
+
+.worker_header_tasks {
+    text-align: center;
+}
+
+.worker_tasks_button {
+    background-color: rgba(255 255 255 / 0.3);
+    margin: auto;
+    color: black;
+    font-size: 18px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.worker_tasks_button:hover {
+    cursor: pointer;
+    background-color: olivedrab;
+    transition: 2s;
+}
+

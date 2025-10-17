@@ -1,0 +1,12 @@
+{
+  "name": "frontforproject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server -c-1 --cors -p 63343"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

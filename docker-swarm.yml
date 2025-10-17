@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: slavka886/myapp-frontend:latest
+    ports:
+      - "63343:63343"
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  database:
+    image: slavka886/myapp-sqlite:latest
+    volumes:
+      - db-data:/data
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - app-network
+
+  backend:
+    image: slavka886/myapp-backend:latest
+    ports:
+      - "8080:8080"
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+    depends_on:
+      - database
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: overlay
+    attachable: true
+
+volumes:
+  db-data:
