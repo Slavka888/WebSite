@@ -17,6 +17,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build Backend with Maven
+        working-directory: ./ServerForProject/server
+        run: mvn clean package -DskipTests
+
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -25,21 +36,21 @@ jobs:
 
       - name: Build and Push Frontend
         run: |
-          docker build -t ${{ env.DOCKER_USERNAME }}/myapp-frontend:latest ./FrontForProject
+          docker build -t ${{ env.DOCKER_USERNAME }}/myapp-frontend:latest ./frontend
           docker push ${{ env.DOCKER_USERNAME }}/myapp-frontend:latest
 
       - name: Build and Push Backend
         run: |
-          docker build -t ${{ env.DOCKER_USERNAME }}/myapp-backend:latest ./ServerForProject/server
+          docker build -t ${{ env.DOCKER_USERNAME }}/myapp-backend:latest ./backend
           docker push ${{ env.DOCKER_USERNAME }}/myapp-backend:latest
 
       - name: Build and Push Database
         run: |
-          docker build -f DockerfileDB -t ${{ env.DOCKER_USERNAME }}/myapp-sqlite:latest ./ServerForProject/server
+          docker build -t ${{ env.DOCKER_USERNAME }}/myapp-sqlite:latest ./database
           docker push ${{ env.DOCKER_USERNAME }}/myapp-sqlite:latest
 
       - name: Deploy to Server
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.SERVER_HOST }}
