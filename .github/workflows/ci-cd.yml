@@ -36,26 +36,15 @@ jobs:
 
       - name: Build and Push Frontend
         run: |
-          docker build -t ${{ env.DOCKER_USERNAME }}/myapp-frontend:latest ./frontend
+          docker build -t ${{ env.DOCKER_USERNAME }}/myapp-frontend:latest ./FrontForProject
           docker push ${{ env.DOCKER_USERNAME }}/myapp-frontend:latest
 
       - name: Build and Push Backend
         run: |
-          docker build -t ${{ env.DOCKER_USERNAME }}/myapp-backend:latest ./backend
+          docker build -t ${{ env.DOCKER_USERNAME }}/myapp-backend:latest ./ServerForProject/server
           docker push ${{ env.DOCKER_USERNAME }}/myapp-backend:latest
 
       - name: Build and Push Database
         run: |
-          docker build -t ${{ env.DOCKER_USERNAME }}/myapp-sqlite:latest ./database
+          docker build -t ${{ env.DOCKER_USERNAME }}/myapp-sqlite:latest ./ServerForProject/server
           docker push ${{ env.DOCKER_USERNAME }}/myapp-sqlite:latest
-
-      - name: Deploy to Server
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          script: |
-            cd /opt/myapp
-            docker stack deploy -c docker-swarm.yml myapp --with-registry-auth
