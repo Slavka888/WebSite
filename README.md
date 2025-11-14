@@ -27,6 +27,7 @@ WebSite - это полнофункциональное веб-приложен�
 
 ## 📁 Структура проекта
 WebSite/ 
+
 ├── ServerForProject/ # Backend часть (Spring Boot) 
 
 ├── FrontForProject/ # Frontend часть (JavaScript) 
