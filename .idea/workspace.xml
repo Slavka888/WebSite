@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="63fe3b31-ccd1-4816-9080-375afb657bf3" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/FrontForProject/AdminPage.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontForProject/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/FrontForProject/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontForProject/Registration.html" beforeDir="false" afterPath="$PROJECT_DIR$/FrontForProject/Registration.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontForProject/WorkerPage.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontForProject/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/FrontForProject/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontForProject/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/FrontForProject/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontForProject/scripts/adminScript.js" beforeDir="false" afterPath="$PROJECT_DIR$/FrontForProject/scripts/adminScript.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontForProject/scripts/authorizationScript.js" beforeDir="false" afterPath="$PROJECT_DIR$/FrontForProject/scripts/authorizationScript.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontForProject/scripts/registrationScript.js" beforeDir="false" afterPath="$PROJECT_DIR$/FrontForProject/scripts/registrationScript.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontForProject/scripts/workerScript.js" beforeDir="false" afterPath="$PROJECT_DIR$/FrontForProject/scripts/workerScript.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontForProject/styles/style.css" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 0
+}]]></component>
+  <component name="ProjectId" id="3AsoxXLLgH2OsdI2f7si6lH8064" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "D:/prog/java/MyProjects/WebSite",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-WS-252.25557.126" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="63fe3b31-ccd1-4816-9080-375afb657bf3" name="Changes" comment="" />
+      <created>1773390885546</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1773390885546</updated>
+      <workItem from="1773390886934" duration="22000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
