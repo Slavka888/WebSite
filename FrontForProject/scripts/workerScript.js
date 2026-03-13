@@ -1,118 +1,139 @@
-// document.addEventListener('DOMContentLoaded', () => {
-//     const tasksList = document.getElementById('tasksList');
-//
-//     // Функция для получения задач пользователя
-//     async function fetchUserTasks() {
-//         // Получаем email пользователя из localStorage
-//         const userEmail = localStorage.getItem('userEmail');
-//
-//         // Проверяем, есть ли email пользователя
-//         if (!userEmail) {
-//             console.error('Email пользователя не найден в localStorage.');
-//             return;
-//         }
-//
-//
-//
-//         try {
-//             // Отправляем запрос на сервер для получения задач пользователя
-//             const tasksResponse = await fetch(`http://localhost:8080/getTasks?email=${userEmail}`);
-//             const tasks = await tasksResponse.json();
-//
-//             // Отображаем задачи на странице
-//             displayTasks(tasks);
-//         } catch (error) {
-//             console.error('Ошибка при получении задач:', error);
-//         }
-//     }
-//
-//     // Функция для отображения задач
-//     function displayTasks(tasks) {
-//         tasksList.innerHTML = ''; // Очищаем предыдущие задачи
-//
-//         if (tasks.length === 0) {
-//             tasksList.textContent = 'Нет задач для отображения.';
-//             return;
-//         }
-//
-//         tasks.forEach(task => {
-//             const taskElement = document.createElement('div');
-//             taskElement.classList.add('task-item'); // Можно добавить класс для стилизации
-//
-//             // Добавляем текст задачи
-//             taskElement.textContent = task.text; // Предполагается, что у задачи есть поле text
-//
-//             tasksList.appendChild(taskElement);
-//         });
-//     }
-//
-//     // Вызываем функцию для получения задач при загрузке страницы
-//     fetchUserTasks();
-// });
-
-document.addEventListener('DOMContentLoaded', function () {
-    const email = localStorage.getItem('userEmail') || 'user@example.com'; // Замени на реальный способ получения email
-    const backendUrl = 'http://localhost:8080';
-
-    fetch(`${backendUrl}/getTasks?email=${encodeURIComponent(email)}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(errData => {
-                    throw new Error(errData.message || 'Network response was not ok');
-                });
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Success:', data);
-            const taskDisplay = document.getElementById('tasksList');
-            if (data.task) {
-                taskDisplay.textContent = data.task; // Отображаем задачу
-            } else {
-                taskDisplay.textContent = data.message || 'Нет задач...'; // Сообщение, если задач нет
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            const taskDisplay = document.getElementById('taskList');
-            taskDisplay.textContent = error.message || 'Error loading task';
-        });
-});
-
-// Получаем кнопку и область задач
-const finishTaskButton = document.getElementById('finishTaskButton');
+const backendUrl = 'http://localhost:8080';
 const tasksList = document.getElementById('tasksList');
+const finishTaskButton = document.getElementById('finishTaskButton');
+const logoutButton = document.getElementById('logoutButton');
 
-// Обработчик нажатия на кнопку "Выполнено"
-finishTaskButton.addEventListener('click', () => {
-    const email = localStorage.getItem('userEmail') || 'user@example.com'; // Замени на реальный способ получения email
-    const backendUrl = 'http://localhost:8080';
+let tasks = [];
+let selectedTaskIndex = -1;
 
-    fetch(`${backendUrl}/deleteTasks?email=${encodeURIComponent(email)}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(errData => {
-                    throw new Error(errData.message || 'Network response was not ok');
-                });
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Success:', data);
-            const taskDisplay = document.getElementById('tasksList');
-            taskDisplay.textContent = "Нет задач..."; // Отображаем задачу
-        })
-    console.log("Задачи очищены")
+// Загрузка задач при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    const userEmail = localStorage.getItem('userEmail');
+
+    if (!userEmail) {
+        window.location.href = 'index.html';
+        return;
+    }
+
+    loadTasks(userEmail);
+    setupLogout();
+
+    // Обновляем задачи каждые 5 секунд
+    setInterval(() => loadTasks(userEmail), 5000);
 });
 
-//дописать, чтобы сообщение о завершении задачи отправлялось админу
+function loadTasks(userEmail) {
+    try {
+        const response = fetch(`${backendUrl}/tasks/${userEmail}`);
+
+        if (!response.ok) {
+            throw new Error('Ошибка при загрузке задач');
+        }
+
+        tasks = response.json();
+        renderTasks();
+        selectedTaskIndex = -1;
+    } catch (error) {
+        console.error('Ошибка загрузки задач:', error);
+        showTasksEmpty();
+    }
+}
+
+function renderTasks() {
+    tasksList.innerHTML = '';
+
+    if (tasks.length === 0) {
+        showTasksEmpty();
+        return;
+    }
+
+    tasks.forEach((task, index) => {
+        const taskCard = createTaskCard(task, index);
+        tasksList.appendChild(taskCard);
+    });
+}
+
+function createTaskCard(task, index) {
+    const card = document.createElement('div');
+    card.className = 'task-card';
+    card.innerHTML = `<p class="task-card__text">${escapeHtml(task)}</p>`;
+
+    card.addEventListener('click', () => {
+        // Убираем выделение со всех карточек
+        document.querySelectorAll('.task-card').forEach(c => {
+            c.classList.remove('task-card--selected');
+        });
+
+        // Добавляем выделение текущей карточке
+        card.classList.add('task-card--selected');
+        selectedTaskIndex = index;
+    });
+
+    return card;
+}
+
+function showTasksEmpty() {
+    tasksList.innerHTML = '<div class="tasks-section__empty">Нет активных задач</div>';
+}
+
+finishTaskButton.addEventListener('click', async () => {
+    if (selectedTaskIndex === -1) {
+        showError('Пожалуйста, выберите задачу для выполнения');
+        return;
+    }
+
+    const userEmail = localStorage.getItem('userEmail');
+    const taskText = tasks[selectedTaskIndex];
+
+    try {
+        const response = await fetch(`${backendUrl}/tasks/${userEmail}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                taskText: taskText
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Ошибка: ${response.status}`);
+        }
+
+        showSuccess('Задача отмечена как выполненная!');
+        await loadTasks(userEmail);
+    } catch (error) {
+        console.error('Ошибка при завершении задачи:', error);
+        showError('Ошибка при завершении задачи');
+    }
+});
+
+function setupLogout() {
+    if (logoutButton) {
+        logoutButton.addEventListener('click', () => {
+            if (confirm('Вы уверены, что хотите выйти?')) {
+                localStorage.removeItem('userEmail');
+                window.location.href = 'index.html';
+            }
+        });
+    }
+}
+
+function escapeHtml(text) {
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, m => map[m]);
+}
+
+function showError(message) {
+    alert(`${message}`);
+}
+
+function showSuccess(message) {
+    alert(`${message}`);
+}

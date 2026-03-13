@@ -5,39 +5,80 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', function (event) {
         event.preventDefault();
 
-        const email = document.getElementById('email').value;
+        const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
 
-        const data = {
-            email: email,
-            password: password
-        };
+        // Очищаем старые ошибки
+        clearErrors();
 
+        // Валидация
+        if (!email || !password) {
+            showError('emailError', 'Пожалуйста, заполните все поля');
+            return;
+        }
+
+        if (!isValidEmail(email)) {
+            showError('emailError', 'Пожалуйста, введите корректный email');
+            return;
+        }
+
+        if (password.length < 6) {
+            showError('passwordError', 'Пароль должен содержать минимум 6 символов');
+            return;
+        }
+
+        // Отправка на сервер
+        sendRegistrationRequest(email, password);
+    });
+
+    function sendRegistrationRequest(email, password) {
         fetch(`${backendUrl}/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify({ email, password })
         })
             .then(response => {
                 if (!response.ok) {
                     return response.json().then(errData => {
-                        throw new Error(errData.message || 'Network response was not ok');
+                        throw new Error(errData.message || 'Ошибка при регистрации');
                     });
                 }
                 return response.json();
             })
             .then(data => {
-                console.log('Success:', data);
-                alert(data.message); // Показываем сообщение об успешной регистрации
-                // Перенаправление на страницу входа
-                window.location.href = 'index.html';
+                console.log('Успешная регистрация:', data);
+                showSuccess('Регистрация выполнена успешно! Перенаправление на страницу входа...');
+
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
             })
             .catch(error => {
-                console.error('Error:', error);
-                alert(error.message || 'Произошла ошибка при регистрации');
-                window.location.href = 'index.html';
+                console.error('Ошибка:', error);
+                showError('emailError', error.message || 'Произошла ошибка при регистрации');
             });
-    });
+    }
+
+    function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function showError(elementId, message) {
+        const errorElement = document.getElementById(elementId);
+        if (errorElement) {
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+    }
+
+    function clearErrors() {
+        document.getElementById('emailError').textContent = '';
+        document.getElementById('passwordError').textContent = '';
+    }
+
+    function showSuccess(message) {
+        alert(message);
+    }
 });

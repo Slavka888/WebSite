@@ -1,89 +1,71 @@
+const backendUrl = 'http://localhost:8080';
 const workerSelect = document.getElementById('workerSelect');
+const workerSelectDelete = document.getElementById('workerSelectDelete');
 const taskInput = document.getElementById('taskInput');
 const sendTaskButton = document.getElementById('sendTaskButton');
 const deleteWorkerButton = document.getElementById('deleteWorkerButton');
+const logoutButton = document.getElementById('logoutButton');
 
-//старая версия
-// // Функция для получения списка сотрудников с сервера
-// function getWorkers() {
-//     fetch('/workers') // Замените на реальный эндпоинт бэка
-//         .then(response => response.json())
-//         .then(workers => {
-//             // Заполнение списка сотрудников
-//             workers.forEach(worker => {
-//                 const option = document.createElement('option');
-//                 option.value = worker.email;
-//                 option.textContent = worker.email;
-//                 option.style.cursor = 'pointer';
-//                 option.style.textDecoration = 'underline';
-//                 option.addEventListener('mouseover', () => {
-//                     option.style.backgroundColor = 'rgba(200, 200, 200, 0.5)';
-//                 });
-//                 option.addEventListener('mouseout', () => {
-//                     option.style.backgroundColor = '';
-//                 });
-//                 workerSelect.appendChild(option);
-//             });
-//         })
-//         .catch(error => console.error('Ошибка при получении списка сотрудников:', error));
-// }
-//
-// // Вызываем функцию для получения списка сотрудников при загрузке страницы
-// getWorkers();
+// Загрузка списка работников при загрузке стра��ицы
+document.addEventListener('DOMContentLoaded', () => {
+    loadWorkers();
+    setupLogout();
+});
 
-async function loadWorkers() {
+function loadWorkers() {
     try {
-        const backendUrl = 'http://localhost:8080';
-        const response = await fetch(`${backendUrl}/workers`);
+        const response = fetch(`${backendUrl}/workers`);
+
         if (!response.ok) {
-            throw new Error('Ошибка сети');
+            throw new Error('Ошибка при загрузке списка работников');
         }
-        const workers = await response.json();
 
-        // Очищаем select перед добавлением новых данных
-        workerSelect.innerHTML = '';
-
-        // Добавляем каждого работника в select
-        workers.forEach(email => {
-            const option = document.createElement('option');
-            option.value = email;
-            option.textContent = email;
-            option.style.cursor = 'pointer';
-            option.style.textDecoration = 'underline';
-            option.addEventListener('mouseover', () => {
-                option.style.backgroundColor = 'rgba(200, 200, 200, 0.5)';
-            });
-            option.addEventListener('mouseout', () => {
-                option.style.backgroundColor = '';
-            });
-            workerSelect.appendChild(option);
-        });
+        const workers = response.json();
+        populateWorkerSelects(workers);
     } catch (error) {
         console.error('Ошибка загрузки списка работников:', error);
+        showError('Не удалось загрузить список работников');
     }
 }
 
-// Загружаем список работников при загрузке страницы
-document.addEventListener('DOMContentLoaded', loadWorkers);
+function populateWorkerSelects(workers) {
+    // Очищаем оба select'а
+    workerSelect.innerHTML = '<option value="">Выберите работника</option>';
+    workerSelectDelete.innerHTML = '<option value="">Выберите работника</option>';
 
-sendTaskButton.addEventListener('click', async () => {
+    // Добавляем работников в оба select'а
+    workers.forEach(email => {
+        // Для отправки задачи
+        const option1 = document.createElement('option');
+        option1.value = email;
+        option1.textContent = email;
+        workerSelect.appendChild(option1);
+
+        // Для удаления работника
+        const option2 = document.createElement('option');
+        option2.value = email;
+        option2.textContent = email;
+        workerSelectDelete.appendChild(option2);
+    });
+}
+
+sendTaskButton.addEventListener('click', () => {
     const selectedWorkerEmail = workerSelect.value;
-    const taskText = taskInput.value;
+    const taskText = taskInput.value.trim();
 
-    if (taskText.trim() === '') {
-        alert('Пожалуйста, введите текст задачи.');
+    // Валидация
+    if (!selectedWorkerEmail) {
+        showError('Пожалуйста, выберите работника');
         return;
     }
 
-    const data = {
-        workerEmail: selectedWorkerEmail,
-        taskText: taskText
-    };
-    console.log('Отправляемые данные:', data);
+    if (!taskText) {
+        showError('Пожалуйста, введите текст задачи');
+        return;
+    }
 
     try {
-        const backendUrl = 'http://localhost:8080';
-        const response = await fetch(`${backendUrl}/tasks`, {
+        const response = fetch(`${backendUrl}/tasks`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -95,43 +77,69 @@ sendTaskButton.addEventListener('click', async () => {
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`Ошибка: ${response.status}`);
         }
 
-        alert('Задача успешно отправлена!');
+        showSuccess('Задача успешно отправлена!');
         taskInput.value = '';
     } catch (error) {
         console.error('Ошибка при отправке задачи:', error);
-        alert('Ошибка при отправке задачи.');
+        showError('Ошибка при отправке задачи');
     }
 });
 
-deleteWorkerButton.addEventListener('click', async () => {
-    const selectedWorkerEmail = workerSelect.value;
+deleteWorkerButton.addEventListener('click', () => {
+    const selectedWorkerEmail = workerSelectDelete.value;
 
-    const data = {
-        workerEmail: selectedWorkerEmail,
-    };
+    // Валидация
+    if (!selectedWorkerEmail) {
+        showError('Пожалуйста, выберите работника для удаления');
+        return;
+    }
+
+    // Подтверждение удаления
+    if (!confirm(`Вы уверены, что хотите удалить работника ${selectedWorkerEmail}?`)) {
+        return;
+    }
 
     try {
-        const backendUrl = 'http://localhost:8080';
-        const response = await fetch(`${backendUrl}/delete`, {
+        const response = fetch(`${backendUrl}/delete`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                workerEmail: selectedWorkerEmail,
+                workerEmail: selectedWorkerEmail
             })
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`Ошибка: ${response.status}`);
         }
-        alert('Удаление произошло успешно!');
-        await loadWorkers(); // Обновляем список работников после удаления
+
+        showSuccess('Работник успешно удален!');
+        loadWorkers(); // Обновляем список работников
     } catch (error) {
-        console.error('Ошибка при удалении:', error);
-        alert('Ошибка при удалении.');
+        console.error('Ошибка при удалении работника:', error);
+        showError('Ошибка при удалении работника');
     }
 });
+
+function setupLogout() {
+    if (logoutButton) {
+        logoutButton.addEventListener('click', () => {
+            if (confirm('Вы уверены, что хотите выйти?')) {
+                localStorage.removeItem('userEmail');
+                window.location.href = 'index.html';
+            }
+        });
+    }
+}
+
+function showError(message) {
+    alert(`${message}`);
+}
+
+function showSuccess(message) {
+    alert(`${message}`);
+}
