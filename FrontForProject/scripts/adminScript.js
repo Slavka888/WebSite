@@ -6,21 +6,21 @@ const sendTaskButton = document.getElementById('sendTaskButton');
 const deleteWorkerButton = document.getElementById('deleteWorkerButton');
 const logoutButton = document.getElementById('logoutButton');
 
-// Загрузка списка работников при загрузке стра��ицы
+// Загрузка списка работников при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
     loadWorkers();
     setupLogout();
 });
 
-function loadWorkers() {
+async function loadWorkers() {
     try {
-        const response = fetch(`${backendUrl}/workers`);
+        const response = await fetch(`${backendUrl}/workers`);
 
         if (!response.ok) {
             throw new Error('Ошибка при загрузке списка работников');
         }
 
-        const workers = response.json();
+        const workers = await response.json();
         populateWorkerSelects(workers);
     } catch (error) {
         console.error('Ошибка загрузки списка работников:', error);
@@ -49,7 +49,7 @@ function populateWorkerSelects(workers) {
     });
 }
 
-sendTaskButton.addEventListener('click', () => {
+sendTaskButton.addEventListener('click', async () => {
     const selectedWorkerEmail = workerSelect.value;
     const taskText = taskInput.value.trim();
 
@@ -65,7 +65,7 @@ sendTaskButton.addEventListener('click', () => {
     }
 
     try {
-        const response = fetch(`${backendUrl}/tasks`, {
+        const response = await fetch(`${backendUrl}/tasks`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -88,7 +88,7 @@ sendTaskButton.addEventListener('click', () => {
     }
 });
 
-deleteWorkerButton.addEventListener('click', () => {
+deleteWorkerButton.addEventListener('click', async () => {
     const selectedWorkerEmail = workerSelectDelete.value;
 
     // Валидация
@@ -103,7 +103,7 @@ deleteWorkerButton.addEventListener('click', () => {
     }
 
     try {
-        const response = fetch(`${backendUrl}/delete`, {
+        const response = await fetch(`${backendUrl}/delete`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
@@ -118,7 +118,7 @@ deleteWorkerButton.addEventListener('click', () => {
         }
 
         showSuccess('Работник успешно удален!');
-        loadWorkers(); // Обновляем список работников
+        await loadWorkers(); // Обновляем список работников
     } catch (error) {
         console.error('Ошибка при удалении работника:', error);
         showError('Ошибка при удалении работника');

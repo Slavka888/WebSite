@@ -22,15 +22,16 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(() => loadTasks(userEmail), 5000);
 });
 
-function loadTasks(userEmail) {
+async function loadTasks(userEmail) {
     try {
-        const response = fetch(`${backendUrl}/tasks/${userEmail}`);
+        const response = await fetch(`${backendUrl}/getTasks?email=${userEmail}`);
 
         if (!response.ok) {
             throw new Error('Ошибка при загрузке задач');
         }
 
-        tasks = response.json();
+        let data = await response.json();
+        tasks = [data.task];
         renderTasks();
         selectedTaskIndex = -1;
     } catch (error) {
@@ -86,7 +87,7 @@ finishTaskButton.addEventListener('click', async () => {
     const taskText = tasks[selectedTaskIndex];
 
     try {
-        const response = await fetch(`${backendUrl}/tasks/${userEmail}`, {
+        const response = await fetch(`${backendUrl}/deleteTasks?email=${userEmail}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'

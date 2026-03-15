@@ -22,8 +22,8 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        if (password.length < 6) {
-            showError('passwordError', 'Пароль должен содержать минимум 6 символов');
+        if (password.length < 5) {
+            showError('passwordError', 'Пароль должен содержать минимум 5 символов');
             return;
         }
 
@@ -48,16 +48,24 @@ document.addEventListener('DOMContentLoaded', function () {
                 return response.json();
             })
             .then(data => {
-                console.log('Успешная авторизация:', data);
-                localStorage.setItem('userEmail', email);
-                showSuccess('Вход выполнен успешно!');
+                // console.log('Успешная авторизация:', data);
+                // localStorage.setItem('userEmail', email);
+                // showSuccess('Вход выполнен успешно!');
 
                 setTimeout(() => {
                     if (data.Role === 'IsAdmin') {
+                        console.log('Успешная авторизация:', data);
+                        localStorage.setItem('adminEmail', email);
+                        showSuccess('Вход выполнен успешно!');
                         window.location.href = 'admin.html';
                     } else if (data.Role === 'IsUser') {
+                        console.log('Успешная авторизация:', data);
+                        localStorage.setItem('userEmail', email);
+                        showSuccess('Вход выполнен успешно!');
                         window.location.href = 'worker.html';
                     } else {
+                        console.log('Необходима регистрация:', data);
+                        showSuccess('Пожалуйста, зарегистрируйтесь!');
                         window.location.href = 'registration.html';
                     }
                 }, 500);

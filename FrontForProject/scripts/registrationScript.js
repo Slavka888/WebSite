@@ -22,8 +22,8 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        if (password.length < 6) {
-            showError('passwordError', 'Пароль должен содержать минимум 6 символов');
+        if (password.length < 5) {
+            showError('passwordError', 'Пароль должен содержать минимум 5 символов');
             return;
         }
 
